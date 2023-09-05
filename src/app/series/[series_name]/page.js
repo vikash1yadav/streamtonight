@@ -4,9 +4,9 @@ import * as tmdbSeriesApi from "@/api/tv-series";
 
 export async function getData(context) {
   // const { series_id } = context.params;
-const seriesSlug = context.params.series_name;
+  const seriesSlug = context.params.series_name;
   const words = seriesSlug.split('-');
-const series_id = words[words.length - 1];
+  const series_id = words[words.length - 1];
 
   const apiKey = constant.TMDB.API_KEY;
 
@@ -32,17 +32,17 @@ const series_id = words[words.length - 1];
   let request;
   let tvSeasonDetails;
   // &append_to_response=external_ids
-    await fetch(
-      `https://api.themoviedb.org/3/tv/${series_id}?api_key=${apiKey}&language=en-US&append_to_response=external_ids`
-    ).then((response) => response.json()).then(async (responseTvDetails) => {
-      request = responseTvDetails;
-      // request.videos.re
-      return await getTvSeasonDetails(
-        responseTvDetails.id,
-        responseTvDetails.seasons
-      )
-    }).then((res) => {
-      tvSeasonDetails = res;
+  await fetch(
+    `https://api.themoviedb.org/3/tv/${series_id}?api_key=${apiKey}&language=en-US&append_to_response=external_ids`
+  ).then((response) => response.json()).then(async (responseTvDetails) => {
+    request = responseTvDetails;
+    // request.videos.re
+    return await getTvSeasonDetails(
+      responseTvDetails.id,
+      responseTvDetails.seasons
+    )
+  }).then((res) => {
+    tvSeasonDetails = res;
   });
 
   const response = await fetch(
@@ -63,7 +63,7 @@ export async function generateMetadata(context) {
   // const id = context.params.series_id;
   const seriesSlug = context.params.series_name;
   const words = seriesSlug.split('-');
-const id = words[words.length - 1];
+  const id = words[words.length - 1];
   const seriesDetails = await tmdbSeriesApi.getTvSeriesById({ series_id: id, append_to_response: "videos" })
   // fetch data
   // optionally access and extend (rather than replace) parent metadata
@@ -87,6 +87,6 @@ const id = words[words.length - 1];
 
 export default async function (context) {
   const data = await getData(context).then((res) => res);
-  data.props.season_number=context.searchParams?.season_number
-  return <Show  {...data?.props}/>
+  data.props.season_number = context.searchParams?.season_number
+  return <Show  {...data?.props} />
 };
