@@ -10,8 +10,7 @@ import slugify from "../../../utils/slugify";
 import constant from "@/helper/constant";
 import MOVIE_CONTENT from "@/helper/movie-content";
 // generateStaticParams getStaticPaths
-export async function generateStaticParams() {
-
+export async function getStaticPaths() {
   const [Movies1 = [], trendingNow = [], MovieList2 = [], MovieList3 = [], top_ratedMovies = [], popularMovies = []] =
     await Promise.all([
       tmdbMovieApiList.getDiscoverMovies({ ...tmdbPayload.BOLLYWOOD_RECENT_YEAR_PAYLOAD, page: 1 }),
@@ -46,7 +45,11 @@ export async function generateStaticParams() {
     // params: { movie_name: "transformers:-rise-of-the-beasts", movie_id: { movie_id: "667538" } },
   });
  
-  return paths;
+  // return paths;
+  return {
+    paths: paths,
+    fallback: true,
+  }
 }
 
 
